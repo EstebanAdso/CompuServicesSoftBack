@@ -16,16 +16,20 @@ public class CompuServicesSoftApplication {
 
 
     @Configuration
-    public static class Myconfiguration{
+    public static class Myconfiguration {
         @Bean
-        public WebMvcConfigurer corsConfigurer(){
+        public WebMvcConfigurer corsConfigurer() {
             return new WebMvcConfigurer() {
                 @Override
                 public void addCorsMappings(CorsRegistry registry) {
                     registry.addMapping("/**")
-                            .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+                            .allowedOrigins("https://compuservicessoft.com") // Tu dominio
+                            .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
+                            .allowedHeaders("*") // Puedes especificar headers si prefieres mayor control
+                            .allowCredentials(true); // Habilita credenciales (si usas sesiones o cookies)
                 }
             };
         }
     }
+
 }
