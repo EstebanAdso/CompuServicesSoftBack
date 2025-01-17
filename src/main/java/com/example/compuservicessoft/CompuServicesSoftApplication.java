@@ -23,7 +23,7 @@ public class CompuServicesSoftApplication {
                 @Override
                 public void addCorsMappings(CorsRegistry registry) {
                     registry.addMapping("/**")
-                            .allowedOrigins("https://compuservicessoft.com", "http://127.0.0.1:5501")
+                            .allowedOrigins("https://compuservicessoft.com")
                             .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
                             .allowedHeaders("*")
                             .allowCredentials(true); // Habilita credenciales (si usas sesiones o cookies)
