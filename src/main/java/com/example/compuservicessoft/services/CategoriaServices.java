@@ -21,13 +21,4 @@ public class CategoriaServices {
     public Optional<Categoria> findById(long id) {
         return categoriaRepository.findById(id);
     }
-
-    public Categoria save(Categoria categoria) {
-        categoriaRepository.save(categoria);
-        return categoria;
-    }
-
-    public void delete(long id) {
-        categoriaRepository.deleteById(id);
-    }
 }

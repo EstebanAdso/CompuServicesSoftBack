@@ -3,6 +3,7 @@ package com.example.compuservicessoft.controller;
 import com.example.compuservicessoft.entities.Producto;
 import com.example.compuservicessoft.services.ProductoServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,12 +31,5 @@ public class ProductoController {
     public Optional<Producto> buscar(@PathVariable Long id) {
         return productoServices.findById(id);
     }
-
-    @PostMapping
-    public Producto insertar(@RequestBody Producto producto) {
-        return productoServices.save(producto);
-    }
-
-
 
 }

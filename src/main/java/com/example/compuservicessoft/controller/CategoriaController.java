@@ -25,10 +25,4 @@ public class CategoriaController {
     public Optional<Categoria> buscar(@PathVariable Long id) {
         return categoriaServices.findById(id);
     }
-
-    @PostMapping
-    public Categoria insertar(@RequestBody Categoria categoria) {
-        return categoriaServices.save(categoria);
-    }
-
 }
