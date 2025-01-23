@@ -16,11 +16,25 @@ public class ProductoController {
     @Autowired
     private ProductoServices productoServices;
 
-    // Endpoint para obtener todos los productos filtrados por categoría
-    @GetMapping("/categoria/{categoriaId}")
-    public List<Producto> obtenerProductosPorCategoria(@PathVariable Long categoriaId) {
-        return productoServices.findByCategoriaId(categoriaId);
+    @GetMapping("/categoria/{valor}")
+    public ResponseEntity<List<Producto>> obtenerProductosPorCategoria(@PathVariable String valor) {
+        try {
+            Long categoriaId = Long.parseLong(valor);
+            List<Producto> productos = productoServices.findByCategoriaId(categoriaId);
+            if (productos.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(productos);
+        } catch (NumberFormatException e) {
+            List<Producto> productos = productoServices.findByCategoriaNombre(valor);
+            if (productos.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(productos);
+        }
     }
+
+
 
     @GetMapping
     public List<Producto> listar() {
@@ -31,5 +45,4 @@ public class ProductoController {
     public Optional<Producto> buscar(@PathVariable Long id) {
         return productoServices.findById(id);
     }
-
 }

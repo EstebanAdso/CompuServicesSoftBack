@@ -26,4 +26,8 @@ public class ProductoServices {
     public Optional<Producto> findById(long id) {
         return productoRepository.findById(id);
     }
+
+    public List<Producto> findByCategoriaNombre(String categoriaNombre){
+        return productoRepository.findByCategoriaNombre(categoriaNombre);
+    }
 }

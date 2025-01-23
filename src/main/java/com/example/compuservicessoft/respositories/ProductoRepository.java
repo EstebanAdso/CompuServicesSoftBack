@@ -8,4 +8,6 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     // Método para obtener productos por categoriaId
     List<Producto> findByCategoriaId(Long categoriaId);
+
+    List<Producto> findByCategoriaNombre(String categoriaNombre);
 }
