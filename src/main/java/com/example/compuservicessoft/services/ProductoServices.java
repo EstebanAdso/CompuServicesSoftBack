@@ -31,4 +31,9 @@ public class ProductoServices {
     public Page<Producto> findByCategoriaNombre(String categoriaNombre, Pageable pageable) {
         return productoRepository.findByCategoriaNombre(categoriaNombre, pageable);
     }
+
+    // Nuevo método para excluir categorías
+    public Page<Producto> findAllExcludingCategories(List<Long> excludedCategoryIds, Pageable pageable) {
+        return productoRepository.findByCategoriaIdNotIn(excludedCategoryIds, pageable);
+    }
 }
