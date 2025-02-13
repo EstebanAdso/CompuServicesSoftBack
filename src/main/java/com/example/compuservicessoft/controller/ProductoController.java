@@ -3,6 +3,10 @@ package com.example.compuservicessoft.controller;
 import com.example.compuservicessoft.entities.Producto;
 import com.example.compuservicessoft.services.ProductoServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,29 +24,34 @@ public class ProductoController {
     private static final Logger logger = Logger.getLogger(ProductoController.class.getName());
 
     @GetMapping("/categoria/{valor}")
-    public ResponseEntity<List<Producto>> obtenerProductosPorCategoria(@PathVariable String valor) {
+    public ResponseEntity<Page<Producto>> obtenerProductosPorCategoria(
+            @PathVariable String valor,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
         try {
             Long categoriaId = Long.parseLong(valor);
-            logger.info("Categoría seleccionada por ID: " + categoriaId);
-            List<Producto> productos = productoServices.findByCategoriaId(categoriaId);
-            if (productos.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
+            Page<Producto> productos = productoServices.findByCategoriaId(categoriaId, pageable);
             return ResponseEntity.ok(productos);
         } catch (NumberFormatException e) {
-            logger.info("Categoría seleccionada por Nombre: " + valor);
-            List<Producto> productos = productoServices.findByCategoriaNombre(valor);
-            if (productos.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
+            Page<Producto> productos = productoServices.findByCategoriaNombre(valor, pageable);
             return ResponseEntity.ok(productos);
         }
     }
 
     @GetMapping
-    public List<Producto> listar() {
-        logger.info("Listando todos los productos");
-        return productoServices.findAll();
+    public ResponseEntity<Page<Producto>> listar(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id,asc") String[] sort) {
+
+        Sort.Direction direction = sort[1].equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+
+        Page<Producto> productos = productoServices.findAll(pageable);
+        return ResponseEntity.ok(productos);
     }
 
     @GetMapping("{id}")

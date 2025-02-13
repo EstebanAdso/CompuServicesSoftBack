@@ -3,6 +3,8 @@ package com.example.compuservicessoft.services;
 import com.example.compuservicessoft.entities.Producto;
 import com.example.compuservicessoft.respositories.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,20 +16,19 @@ public class ProductoServices {
     @Autowired
     private ProductoRepository productoRepository;
 
-    // Método para obtener productos por categoría
-    public List<Producto> findByCategoriaId(Long categoriaId) {
-        return productoRepository.findByCategoriaId(categoriaId);
+    public Page<Producto> findByCategoriaId(Long categoriaId, Pageable pageable) {
+        return productoRepository.findByCategoriaId(categoriaId, pageable);
     }
 
-    public List<Producto> findAll() {
-        return productoRepository.findAll();
+    public Page<Producto> findAll(Pageable pageable) {
+        return productoRepository.findAll(pageable);
     }
 
     public Optional<Producto> findById(long id) {
         return productoRepository.findById(id);
     }
 
-    public List<Producto> findByCategoriaNombre(String categoriaNombre){
-        return productoRepository.findByCategoriaNombre(categoriaNombre);
+    public Page<Producto> findByCategoriaNombre(String categoriaNombre, Pageable pageable) {
+        return productoRepository.findByCategoriaNombre(categoriaNombre, pageable);
     }
 }
