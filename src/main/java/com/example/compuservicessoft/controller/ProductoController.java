@@ -38,7 +38,8 @@ public class ProductoController {
 
         try {
             Long categoriaId = Long.parseLong(valor);
-            Page<Producto> productos = productoServices.findByCategoriaId(categoriaId, pageable);
+            // Excluir categorías no deseadas al listar productos por categoría
+            Page<Producto> productos = productoServices.findByCategoriaIdExcludingCategories(categoriaId, CATEGORIAS_EXCLUIDAS, pageable);
             return ResponseEntity.ok(productos);
         } catch (NumberFormatException e) {
             Page<Producto> productos = productoServices.findByCategoriaNombre(valor, pageable);
@@ -56,7 +57,7 @@ public class ProductoController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
 
         logger.info("Listando productos - Página: " + page + " Tamaño: " + size);
-        // Usar el nuevo método para excluir categorías
+        // Excluir categorías no deseadas al listar todos los productos
         Page<Producto> productos = productoServices.findAllExcludingCategories(CATEGORIAS_EXCLUIDAS, pageable);
         return ResponseEntity.ok(productos);
     }
@@ -65,5 +66,19 @@ public class ProductoController {
     public Optional<Producto> buscar(@PathVariable Long id) {
         logger.info("Buscando producto con ID: " + id);
         return productoServices.findById(id);
+    }
+
+    @GetMapping("/categoria/{valor}/todos")
+    public ResponseEntity<List<Producto>> obtenerTodosProductosPorCategoria(@PathVariable String valor) {
+        logger.info("Categoría seleccionada (todos los productos): " + valor);
+
+        try {
+            Long categoriaId = Long.parseLong(valor);
+            List<Producto> productos = productoServices.findAllByCategoriaId(categoriaId);
+            return ResponseEntity.ok(productos);
+        } catch (NumberFormatException e) {
+            List<Producto> productos = productoServices.findAllByCategoriaNombre(valor);
+            return ResponseEntity.ok(productos);
+        }
     }
 }

@@ -14,11 +14,16 @@ public class CategoriaServices {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    // Método para listar categorías excluyendo las no deseadas
+    public List<Categoria> findAllExcludingCategories(List<Long> excludedCategoryIds) {
+        return categoriaRepository.findByIdNotIn(excludedCategoryIds);
+    }
+
     public List<Categoria> findAll() {
         return categoriaRepository.findAll();
     }
 
-    public Optional<Categoria> findById(long id) {
+    public Optional<Categoria> findById(Long id) {
         return categoriaRepository.findById(id);
     }
 }

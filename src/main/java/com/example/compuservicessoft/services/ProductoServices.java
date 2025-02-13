@@ -16,6 +16,20 @@ public class ProductoServices {
     @Autowired
     private ProductoRepository productoRepository;
 
+    // Método para listar productos excluyendo categorías
+    public Page<Producto> findAllExcludingCategories(List<Long> excludedCategoryIds, Pageable pageable) {
+        return productoRepository.findByCategoriaIdNotIn(excludedCategoryIds, pageable);
+    }
+
+    // Método para listar productos por categoría excluyendo categorías
+    public Page<Producto> findByCategoriaIdExcludingCategories(
+            Long categoriaId,
+            List<Long> excludedCategoryIds,
+            Pageable pageable
+    ) {
+        return productoRepository.findByCategoriaIdAndCategoriaIdNotIn(categoriaId, excludedCategoryIds, pageable);
+    }
+
     public Page<Producto> findByCategoriaId(Long categoriaId, Pageable pageable) {
         return productoRepository.findByCategoriaId(categoriaId, pageable);
     }
@@ -32,8 +46,11 @@ public class ProductoServices {
         return productoRepository.findByCategoriaNombre(categoriaNombre, pageable);
     }
 
-    // Nuevo método para excluir categorías
-    public Page<Producto> findAllExcludingCategories(List<Long> excludedCategoryIds, Pageable pageable) {
-        return productoRepository.findByCategoriaIdNotIn(excludedCategoryIds, pageable);
+    public List<Producto> findAllByCategoriaId(Long categoriaId) {
+        return productoRepository.findByCategoriaId(categoriaId);
+    }
+
+    public List<Producto> findAllByCategoriaNombre(String categoriaNombre) {
+        return productoRepository.findByCategoriaNombre(categoriaNombre);
     }
 }
